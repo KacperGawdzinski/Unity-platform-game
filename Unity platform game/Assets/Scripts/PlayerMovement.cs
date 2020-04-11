@@ -5,9 +5,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
+    public Animator anim;
     void Start()
     {
-        
+        rb.freezeRotation=true;
     }
 
     // Update is called once per frame
@@ -15,15 +16,24 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.A))
         {
-            rb.velocity=new Vector2(-5,rb.velocity.y);
+            rb.velocity = new Vector2(-5,rb.velocity.y);
+            transform.localScale=new Vector2(-1,1);
+            anim.SetBool("run",true);
         }
-        if(Input.GetKey(KeyCode.D))
+        else if(Input.GetKey(KeyCode.D))
         {
-            rb.velocity=new Vector2(5,rb.velocity.y);
+            rb.velocity = new Vector2(5,rb.velocity.y);
+            transform.localScale=new Vector2(1,1);
+            anim.SetBool("run",true);
         }
-        if(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W))
+        else if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space))
         {
-            rb.velocity=new Vector2(rb.velocity.x,5);
+            rb.velocity = new Vector2(rb.velocity.x,5);
+        }
+        else
+        {
+            rb.velocity = new Vector2(0,rb.velocity.y);
+            anim.SetBool("run",false);
         }
     }
 }

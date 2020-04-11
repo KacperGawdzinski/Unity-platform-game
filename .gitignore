@@ -1,3 +1,4 @@
+# as far as ik some meta files are important so I've used basic .gitignore for Unity with small modificastions
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -21,6 +22,7 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode/
 
 # Gradle cache directory
 .gradle/
