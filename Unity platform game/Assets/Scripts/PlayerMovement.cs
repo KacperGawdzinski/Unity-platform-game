@@ -10,9 +10,10 @@ public class PlayerMovement : MonoBehaviour
     Animator anim;
     Collider2D coll;
     [SerializeField] LayerMask ground;
+    [SerializeField] float speedForce;
+    [SerializeField] float jumpForce;
     float h_vel;
-    float v_vel;
-
+    public int cherries = 0;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,24 +24,38 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        h_vel = Input.GetAxis("Horizontal");
-        if(h_vel < -0.1)
+        Movement();
+    }
+
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag=="Collectable")
         {
-            rb.velocity = new Vector2(-10,rb.velocity.y);
-            transform.localScale=new Vector2(-1,1);
+            Destroy(collision.gameObject);
+            cherries++;
+        }
+    }
+    private void Movement()
+    {
+        h_vel = Input.GetAxis("Horizontal");
+        if (h_vel < -0.1)
+        {
+            rb.velocity = new Vector2(-speedForce, rb.velocity.y);
+            transform.localScale = new Vector2(-1, 1);
             state = State.run;
         }
 
-        else if(h_vel > 0.1)
+        else if (h_vel > 0.1)
         {
-            rb.velocity = new Vector2(10,rb.velocity.y);
-            transform.localScale=new Vector2(1,1);
+            rb.velocity = new Vector2(speedForce, rb.velocity.y);
+            transform.localScale = new Vector2(1, 1);
             state = State.run;
         }
         else
         {
-            rb.velocity = new Vector2(0,rb.velocity.y);
-            if(rb.velocity.y > 0.1)
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            if (rb.velocity.y > 0.1)
             {
                 state = State.jump;
             }
@@ -50,15 +65,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if(Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
+        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
         {
-            rb.velocity = new Vector2(rb.velocity.x,7.5f);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             state = State.jump;
         }
-        if(rb.velocity.y < -0.1)
+        if (rb.velocity.y < -0.1)
         {
             state = State.fall;
         }
-        anim.SetInteger("state",(int)state);
+        anim.SetInteger("state", (int)state);
     }
 }
